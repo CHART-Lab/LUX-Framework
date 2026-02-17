@@ -39,10 +39,6 @@
                         A structured approach to evaluating LLM utility. Click on domains to filter, and click cards to explore components.
                     </p>
                     <div class="mt-6 flex flex-wrap items-center justify-center md:justify-start gap-3">
-                        <button @click="showCoreModal = true" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-emerald-600 px-5 py-2.5 rounded-full hover:bg-emerald-700 transition-all shadow-sm hover:shadow-md transform active:scale-95">
-                            <i class="ph ph-cpu text-lg"></i>
-                            View CORE Elements
-                        </button>
                         <a href="#" target="_blank" class="inline-flex items-center gap-2 text-xs font-bold text-slate-600 bg-white border border-slate-300 px-5 py-2.5 rounded-full hover:bg-slate-50 hover:text-slate-900 transition-all shadow-sm hover:shadow-md transform active:scale-95">
                             <i class="ph ph-article text-lg"></i>
                             Read Framework Paper
@@ -301,159 +297,7 @@
         </div>
     </div>
 
-    <div x-show="showCoreModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" @click="showCoreModal = false"></div>
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl relative z-10 overflow-hidden transform transition-all"
-             x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
-            <div class="bg-slate-900 p-6 flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <div class="bg-emerald-500/20 p-2 rounded-lg"><i class="ph ph-cpu text-2xl text-emerald-400"></i></div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white">The CORE</h2>
-                        <p class="text-slate-400 text-xs">Foundational elements of LUX</p>
-                    </div>
-                </div>
-                <button @click="showCoreModal = false" class="text-slate-500 hover:text-white p-2 hover:bg-slate-800 rounded-full transition-colors"><i class="ph ph-x text-xl"></i></button>
-            </div>
-            <div class="p-8 grid md:grid-cols-2 gap-6">
-                <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
-                    <h3 class="font-bold text-slate-900 mb-2 flex items-center gap-2"><i class="ph ph-database text-emerald-600"></i> Data</h3>
-                    <p class="text-xs text-slate-600 leading-relaxed">Determines depth and breadth. Dictates what the model learns, inherited biases, and generalization contexts.</p>
-                </div>
-                <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
-                    <h3 class="font-bold text-slate-900 mb-2 flex items-center gap-2"><i class="ph ph-circuitry text-blue-600"></i> Architecture</h3>
-                    <p class="text-xs text-slate-600 leading-relaxed">Governs representation and transformation. Defines internal mechanisms enabling generation and behavior.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        const csvDataString = `
-Domain,Dimension,Component,Metric,Description,Citation,Hyperlink
-Performance,Accuracy,General Knowledge,MMLU,"Massive Multitask Language Understanding. Covers 57 subjects across STEM, the humanities, and social sciences.","@article{hendrycks2020measuring,
-  title={Measuring Massive Multitask Language Understanding},
-  author={Dan Hendrycks and Collin Burns and Steven Basart},
-  journal={ICLR},
-  year={2021}
-}",https://arxiv.org/abs/2009.03300
-Performance,Accuracy,General Knowledge,ARC-Challenge,A grade-school science question set designed to encourage research in advanced question-answering.,"@article{clark2018think,
-  title={Think you have Solved Question Answering? Try ARC, the AI2 Reasoning Challenge},
-  author={Peter Clark and Isaac Cowhey and Oren Etzioni},
-  journal={arXiv},
-  year={2018}
-}",https://arxiv.org/abs/1803.05457
-Performance,Accuracy,Reasoning,GSM8K,High quality linguistically diverse grade school math word problems.,"@article{cobbe2021training,
-  title={Training Verifiers to Solve Math Word Problems},
-  author={Karl Cobbe and Vineet Kosaraju and Mohammad Bavarian},
-  journal={arXiv},
-  year={2021}
-}",https://arxiv.org/abs/2110.14168
-Performance,Accuracy,Reasoning,HellaSwag,A dataset for studying grounded commonsense inference.,"@inproceedings{zellers2019hellaswag,
-  title={HellaSwag: Can a Machine Really Finish Your Sentence?},
-  author={Rowan Zellers and Ari Holtzman and Yonatan Bisk},
-  booktitle={ACL},
-  year={2019}
-}",https://arxiv.org/abs/1905.07830
-Performance,Reliability,Hallucination,TruthfulQA,Measures whether models mimic human falsehoods across 38 categories.,"@article{lin2021truthfulqa,
-  title={TruthfulQA: Measuring How Models Mimic Human Falsehoods},
-  author={Stephanie Lin and Jacob Hilton and Owain Evans},
-  journal={arXiv},
-  year={2021}
-}",https://arxiv.org/abs/2109.07958
-Performance,Reliability,Hallucination,HaluEval,A large-scale hallucination evaluation benchmark for LLMs.,"@inproceedings{li2023halueval,
-  title={HaluEval: A Large-Scale Hallucination Evaluation Benchmark for Large Language Models},
-  author={Junyi Li and Xiaoxue Cheng and Wayne Xin Zhao},
-  booktitle={EMNLP},
-  year={2023}
-}",https://arxiv.org/abs/2305.11747
-Performance,Reliability,Calibration,Expected Calibration Error,Measures the difference between predicted confidence and actual accuracy.,"@inproceedings{guo2017calibration,
-  title={On Calibration of Modern Neural Networks},
-  author={Chuan Guo and Geoff Pleiss and Yu Sun},
-  booktitle={ICML},
-  year={2017}
-}",https://arxiv.org/abs/1706.04599
-Interaction,Usability,Coherence,BLEU,Bilingual Evaluation Understudy. Scores based on the precision of n-grams.,"@inproceedings{papineni2002bleu,
-  title={BLEU: a method for automatic evaluation of machine translation},
-  author={Kishore Papineni and Salim Roukos and Todd Ward},
-  booktitle={ACL},
-  year={2002}
-}",https://aclanthology.org/P02-1040/
-Interaction,Usability,Coherence,ROUGE-L,Longest Common Subsequence based metric for summarization.,"@inproceedings{lin2004rouge,
-  title={ROUGE: A Package for Automatic Evaluation of Summaries},
-  author={Chin-Yew Lin},
-  booktitle={ACL},
-  year={2004}
-}",https://aclanthology.org/W04-1013/
-Interaction,Usability,Fluency,Perplexity,A measurement of how well a probability model predicts a sample.,"@article{jelinek1977perplexity,
-  title={Perplexity—a measure of the difficulty of speech recognition tasks},
-  author={Fred Jelinek and Robert L. Mercer},
-  journal={JASA},
-  year={1977}
-}",https://en.wikipedia.org/wiki/Perplexity
-Interaction,User Experience,Navigation,Click-Depth,Average number of interactions required to reach desired output.,"@misc{standard_metric_click_depth,
-  title={Standard Usability Metric: Click-Depth},
-  author={Standard Industry Metric},
-  year={2023}
-}",#
-Operations,Efficiency,Latency,Time To First Token (TTFT),The duration from prompt submission to the generation of the first token.,"@misc{standard_metric_ttft,
-  title={Standard Efficiency Metric: Time To First Token},
-  author={Standard Industry Metric},
-  year={2023}
-}",#
-Operations,Efficiency,Throughput,Tokens Per Second (TPS),The rate at which the model generates tokens after the first one.,"@misc{standard_metric_tps,
-  title={Standard Efficiency Metric: Tokens Per Second},
-  author={Standard Industry Metric},
-  year={2023}
-}",#
-Operations,Cost,Inference Cost,Cost Per 1k Tokens,The monetary cost to process input/output tokens.,"@misc{standard_metric_cost,
-  title={Standard Operational Metric: Cost Per 1k Tokens},
-  author={Standard Industry Metric},
-  year={2023}
-}",#
-Operations,Cost,Training Cost,FLOPs,Floating point operations required to train the model.,"@article{kaplan2020scaling,
-  title={Scaling Laws for Neural Language Models},
-  author={Jared Kaplan and Sam McCandlish and Tom Henighan},
-  journal={arXiv},
-  year={2020}
-}",https://arxiv.org/abs/2001.08361
-Operations,Environmental,Carbon Footprint,kgCO2eq,Estimated carbon emissions equivalents for model training/inference.,"@inproceedings{strubell2019energy,
-  title={Energy and Policy Considerations for Deep Learning in NLP},
-  author={Emma Strubell and Ananya Ganesh and Andrew McCallum},
-  booktitle={ACL},
-  year={2019}
-}",https://arxiv.org/abs/1906.02243
-Governance,Safety,Bias,CrowS-Pairs,Crowdsourced Stereotype Pairs benchmark for measuring social bias.,"@inproceedings{nangia2020crows,
-  title={CrowS-Pairs: A Challenge Dataset for Measuring Social Biases in Masked Language Models},
-  author={Nikita Nangia and Clara Vania and Rasmus Biskopsto},
-  booktitle={EMNLP},
-  year={2020}
-}",https://aclanthology.org/2020.emnlp-main.154/
-Governance,Safety,Bias,BBQ,Bias Benchmark for QA. Measures bias in question answering contexts.,"@inproceedings{parrish2021bbq,
-  title={BBQ: A hand-built bias benchmark for question answering},
-  author={Alicia Parrish and Angelica Chen and Nikita Nangia},
-  booktitle={Findings of ACL},
-  year={2021}
-}",https://arxiv.org/abs/2110.08193
-Governance,Safety,Toxicity,RealToxicityPrompts,Evaluating neural toxic degeneration in language models.,"@inproceedings{gehman2020realtoxicityprompts,
-  title={RealToxicityPrompts: Evaluating Neural Toxic Degeneration in Language Models},
-  author={Samuel Gehman and Suchin Gururangan and Maarten Sap},
-  booktitle={Findings of EMNLP},
-  year={2020}
-}",https://arxiv.org/abs/2009.11462
-Governance,Transparency,Documentation,Model Card,Standardized documentation of model limitations and intended use.,"@inproceedings{mitchell2019model,
-  title={Model Cards for Model Reporting},
-  author={Margaret Mitchell and Simone Wu and Andrew Zaldivar},
-  booktitle={FAT*},
-  year={2019}
-}",https://arxiv.org/abs/1810.03993
-Governance,Privacy,Data Leakage,Training Data Extraction,Measures ability to extract memorized private data from the model.,"@inproceedings{carlini2021extracting,
-  title={Extracting Training Data from Large Language Models},
-  author={Nicholas Carlini and Florian Tramer and Eric Wallace},
-  booktitle={USENIX Security},
-  year={2021}
-}",https://arxiv.org/abs/2012.07805
-`;
 
         function luxApp() {
             return {
@@ -478,9 +322,30 @@ Governance,Privacy,Data Leakage,Training Data Extraction,Measures ability to ext
                 ],
 
                 init() {
-                    const result = Papa.parse(csvDataString, { header: true, skipEmptyLines: true });
-                    this.processData(result.data);
-                    setTimeout(() => { this.loading = false; }, 300);
+                    // Fetch the external CSV file
+                    fetch('./Metric_Data.csv') 
+                        .then(response => {
+                            if (!response.ok) throw new Error("Network response was not ok");
+                            return response.text();
+                        })
+                        .then(csvText => {
+                            // Parse the text we just downloaded
+                            const result = Papa.parse(csvText, { 
+                                header: true, 
+                                skipEmptyLines: true 
+                            });
+                            
+                            // Process the data as before
+                            this.processData(result.data);
+                            
+                            // Artificial delay removed, just turn off loading
+                            this.loading = false;
+                        })
+                        .catch(error => {
+                            console.error('Error loading CSV:', error);
+                            this.loading = false;
+                            // Optional: You could set an error state here to show a message in the UI
+                        });
                 },
 
                 processData(csvData) {

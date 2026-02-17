@@ -1,0 +1,184 @@
+Domain,Dimension,Component,Metric,Metric Description,hyperlink,BibTeX
+Performance,Task Validity,Accuracy,OpenFactCheck,"OpenFactCheck is an open-source toolkit that makes it easier to fact-check LLM outputs in a consistent, modular way.",https://aclanthology.org/2025.coling-main.755.pdf,"@inproceedings{wang2025openfactcheck,
+  title={OpenFactCheck: Building, benchmarking customized fact-checking systems and evaluating the factuality of claims and LLMs},
+  author={Wang, Yuxia and Wang, Minghan and Iqbal, Hasan and Georgiev, Georgi N and Geng, Jiahui and Gurevych, Iryna and Nakov, Preslav},
+  booktitle={Proceedings of the 31st international conference on computational linguistics},
+  pages={11399--11421},
+  year={2025}
+}"
+Performance,Task Validity,Accuracy,FreshQA,"FreshQA is a continually updated benchmark that tests whether LLMs can answer current, fast-changing questions and debunk false premises, showing today’s models often fail on both and that a simple retrieval-augmented prompt (FreshPrompt) can improve correctness while reducing hallucinations.",https://aclanthology.org/2024.findings-acl.813.pdf,"@inproceedings{vu2024freshllms,
+  title={Freshllms: Refreshing large language models with search engine augmentation},
+  author={Vu, Tu and Iyyer, Mohit and Wang, Xuezhi and Constant, Noah and Wei, Jerry and Wei, Jason and Tar, Chris and Sung, Yun-Hsuan and Zhou, Denny and Le, Quoc and others},
+  booktitle={Findings of the Association for Computational Linguistics: ACL 2024},
+  pages={13697--13720},
+  year={2024}
+}"
+Performance,Task Validity,Accuracy,BLEU,"BLEU scores a generated text by measuring how much its word sequences (n-grams) overlap with one or more reference texts, with a penalty for overly short outputs.",https://ehudreiter.com/wp-content/uploads/2018/06/structured-survey-bleu-validity1.pdf,"@article{reiter2018structured,
+  title={A structured review of the validity of BLEU},
+  author={Reiter, Ehud},
+  journal={Computational Linguistics},
+  volume={44},
+  number={3},
+  pages={393--401},
+  year={2018}
+}"
+Performance,Task Validity,Completness,BERTScore,"BERTScore measures how similar a generated text is to a reference by comparing the meanings of their words using BERT embeddings, and reports precision, recall, and F1.",https://arxiv.org/pdf/1904.09675,"@article{zhang2019bertscore,
+  title={Bertscore: Evaluating text generation with bert},
+  author={Zhang, Tianyi and Kishore, Varsha and Wu, Felix and Weinberger, Kilian Q and Artzi, Yoav},
+  journal={arXiv preprint arXiv:1904.09675},
+  year={2019}
+}"
+Performance,Task Validity,Completeness,QAFactEval,"QAFactEval checks whether a summary is factually consistent by asking and answering questions about it, and it improves reliability by generating better questions and filtering out unanswerable ones.",https://aclanthology.org/2022.naacl-main.187.pdf,"@inproceedings{fabbri2022qafacteval,
+  title={QAFactEval: Improved QA-based factual consistency evaluation for summarization},
+  author={Fabbri, Alexander Richard and Wu, Chien-Sheng and Liu, Wenhao and Xiong, Caiming},
+  booktitle={Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},
+  pages={2587--2601},
+  year={2022}
+}"
+Performance,Task Validity,Timeliness,RealTime QA,"RealTime QA is a benchmark that is updated weekly that tests whether systems can answer questions about newly emerging events, showing retrieval helps models stay current but they still give outdated answers when evidence is missing.",https://proceedings.neurips.cc/paper_files/paper/2023/file/9941624ef7f867a502732b5154d30cb7-Paper-Datasets_and_Benchmarks.pdf,"@article{kasai2023realtime,
+  title={Realtime qa: What's the answer right now?},
+  author={Kasai, Jungo and Sakaguchi, Keisuke and Le Bras, Ronan and Asai, Akari and Yu, Xinyan and Radev, Dragomir and Smith, Noah A and Choi, Yejin and Inui, Kentaro and others},
+  journal={Advances in neural information processing systems},
+  volume={36},
+  pages={49025--49043},
+  year={2023}
+}"
+Performance,Stability,Reproducibility,Intraclass Correlation Coefficient (ICC),"The Intraclass Correlation Coefficient (ICC) quantifies how consistently repeated measurements (e.g., multiple runs on the same inputs) agree with each other, with higher ICC indicating greater reproducibility.",https://pmc.ncbi.nlm.nih.gov/articles/PMC4913118/pdf/main.pdf,"@article{koo2016guideline,
+  title={A guideline of selecting and reporting intraclass correlation coefficients for reliability research},
+  author={Koo, Terry K and Li, Mae Y},
+  journal={Journal of chiropractic medicine},
+  volume={15},
+  number={2},
+  pages={155--163},
+  year={2016},
+  publisher={National University of Health Sciences}
+}"
+Performance,Stability,Robustness,CheckList,"CheckList is a testing method that checks robustness by making small, controlled changes to an input (like typos or harmless wording edits) and seeing whether the model still gives the right kind of answer.",https://arxiv.org/pdf/2005.04118,"@inproceedings{ribeiro2020beyond,
+  title={Beyond accuracy: Behavioral testing of NLP models with CheckList},
+  author={Ribeiro, Marco Tulio and Wu, Tongshuang and Guestrin, Carlos and Singh, Sameer},
+  booktitle={Proceedings of the 58th annual meeting of the association for computational linguistics},
+  pages={4902--4912},
+  year={2020}
+}"
+Performance,Stability,Confidence,SYCON Bench,SYCON Bench operationalizes conversational sycophancy as a model’s susceptibility to user pressure by quantifying the latency to the first stance change (“flip”) and the total number of stance changes across a controlled multi-turn interaction.,https://arxiv.org/pdf/2505.23840,"@article{hong2025measuring,
+  title={Measuring sycophancy of language models in multi-turn dialogues},
+  author={Hong, Jiseung and Byun, Grace and Kim, Seungone and Shu, Kai and Choi, Jinho D},
+  journal={arXiv preprint arXiv:2505.23840},
+  year={2025}
+}"
+Interaction,Workflow,System Integration,StableToolBench,"StableToolBench quantifies whether an LLM agent can successfully and consistently use external tools/APIs to complete tasks, while controlling for failures caused by unstable real-world endpoints.",https://arxiv.org/pdf/2403.07714,"@inproceedings{guo2024stabletoolbench,
+  title={Stabletoolbench: Towards stable large-scale benchmarking on tool learning of large language models},
+  author={Guo, Zhicheng and Cheng, Sijie and Wang, Hao and Liang, Shihao and Qin, Yujia and Li, Peng and Liu, Zhiyuan and Sun, Maosong and Liu, Yang},
+  booktitle={Findings of the Association for Computational Linguistics: ACL 2024},
+  pages={11143--11156},
+  year={2024}
+}"
+Interaction,Workflow,Interface,System Usability Scale (SUS),The System Usability Scale (SUS) is a short 10-item post-use questionnaire that produces a single overall usability score (0–100) reflecting users’ perceived ease of use.,https://www.tandfonline.com/doi/epdf/10.1080/15391523.2020.1867938?needAccess=true,"@article{vlachogianni2022perceived,
+  title={Perceived usability evaluation of educational technology using the System Usability Scale (SUS): A systematic review},
+  author={Vlachogianni, Prokopia and Tselios, Nikolaos},
+  journal={Journal of Research on Technology in Education},
+  volume={54},
+  number={3},
+  pages={392--409},
+  year={2022},
+  publisher={Taylor \& Francis}
+}"
+Interaction,Presentation,Style,OpeNLGauge,"OpeNLGauge is a reference-free, LLM-based metric that rates generated text on qualities like fluency and can point to specific parts of the output that explain the score.",https://aclanthology.org/2025.inlg-main.19.pdf?utm_source=chatgpt.com,"@inproceedings{kartac2025openlgauge,
+  title={Openlgauge: An explainable metric for nlg evaluation with open-weights llms},
+  author={Kart{\'a}c, Ivan and Lango, Mateusz and Du{\v{s}}ek, Ond{\v{r}}ej},
+  booktitle={Proceedings of the 18th International Natural Language Generation Conference},
+  pages={292--337},
+  year={2025}
+}"
+Interaction,Presentation,Modality,StructEval,"StructEval evaluates how reliably an LLM can produce machine-executable structured outputs, especially code and other rigid, parser-checked formats, by scoring whether generations satisfy strict structural/validation constraints.",https://arxiv.org/pdf/2505.20139,"@article{yang2025structeval,
+  title={StructEval: Benchmarking LLMs' Capabilities to Generate Structural Outputs},
+  author={Yang, Jialin and Jiang, Dongfu and He, Lipeng and Siu, Sherman and Zhang, Yuxuan and Liao, Disen and Li, Zhuofeng and Zeng, Huaye and Jia, Yiming and Wang, Haozhe and others},
+  journal={arXiv preprint arXiv:2505.20139},
+  year={2025}
+}"
+Interaction,Presentation,Modality,FOFO,"FOFO evaluates how reliably an LLM can follow human-facing formatting instructions, like templates, layouts, and presentation rules, by measuring whether outputs match the required readable, user-specified format rather than executable code.",https://arxiv.org/pdf/2402.18667,"@inproceedings{xia2024fofo,
+  title={FOFO: A benchmark to evaluate LLMs’ format-following capability},
+  author={Xia, Congying and Xing, Chen and Du, Jiangshu and Yang, Xinyi and Feng, Yihao and Xu, Ran and Yin, Wenpeng and Xiong, Caiming},
+  booktitle={Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages={680--699},
+  year={2024}
+}"
+Interaction,Traceability,Attribution,Attributable to Identified Sources (AIS),"AIS quantifies what fraction of a model’s output can be directly traced to, and supported by, the provided source documents.",https://mitp.silverchair-cdn.com/mitp/content_public/journal/coli/49/4/10.1162_coli_a_00486/2/coli_a_00486.pdf?Expires=1773784019&Signature=2zzxB6JzFxa0IUX04POWDeFM8nVEnH6Yu~LIgPss-vbbdl7AnaKcd4f2L9zC0sJJCpHaudIKV-DM9oUWJnURaESQvjJdwCnhQleQNKZH0~JTJw5OFpQN75AVf7QpcyjRQpGPxG1tmTeyMJF4thTUsjqGlkfVXuziZQUVkIXw9FB7EZMwVdbWZqIGMtDtkq4Q7QGtYKB1y-acKeAlFvaBEphkCuHZBtNHPg7DvfP9j4B50hSwsiZj~a77TGf6zXfEGv~Uh1Gl4IqyzYI5rs5e9W7ZOvLk~hYf1Ktvfx3SL-Zi196QFDorp0zLElhCykDcJf5W1ovKcLOcxGdJ777fzA__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA,"@article{rashkin2023measuring,
+  title={Measuring attribution in natural language generation models},
+  author={Rashkin, Hannah and Nikolaev, Vitaly and Lamm, Matthew and Aroyo, Lora and Collins, Michael and Das, Dipanjan and Petrov, Slav and Tomar, Gaurav Singh and Turc, Iulia and Reitter, David},
+  journal={Computational Linguistics},
+  volume={49},
+  number={4},
+  pages={777--840},
+  year={2023}
+}"
+Interaction,Traceability,Chain of Reasoning,REVEAL: Reasoning Verification Evaluation,"REVEAL is a benchmark dataset for verifying chain-of-thought reasoning that provides step-level labels indicating whether each reasoning step is relevant, supported by evidence, and logically correct.",https://arxiv.org/pdf/2402.00559,"@inproceedings{jacovi2024chain,
+  title={A chain-of-thought is as strong as its weakest link: A benchmark for verifiers of reasoning chains},
+  author={Jacovi, Alon and Bitton, Yonatan and Bohnet, Bernd and Herzig, Jonathan and Honovich, Or and Tseng, Michael and Collins, Michael and Aharoni, Roee and Geva, Mor},
+  booktitle={Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages={4615--4634},
+  year={2024}
+}"
+Operations,Cost,Infrastructure,Infrastructure Cost Metric,"NVIDIA operationalizes LLM infrastructure cost as total cost of ownership (TCO) for inference, combining the end-to-end serving stack costs (e.g., GPU hardware/instances plus supporting system costs) and often reporting it as an amortized cost per unit of inference work (e.g., per token or per throughput level).",https://developer.nvidia.com/blog/llm-inference-benchmarking-how-much-does-your-llm-inference-cost/?utm_source=chatgpt.com,
+Operations,Cost,Infrastructure,TokenPowerBench,"TokenPowerBench is a benchmarking framework for systematically measuring and analyzing the power consumption and energy efficiency of large language model inference across different models, hardware, and configurations to help optimize costs and sustainability. ",https://arxiv.org/pdf/2512.03024,"@article{niu2025tokenpowerbench,
+  title={TokenPowerBench: Benchmarking the Power Consumption of LLM Inference},
+  author={Niu, Chenxu and Zhang, Wei and Li, Jie and Zhao, Yongjian and Wang, Tongyang and Wang, Xi and Chen, Yong},
+  journal={arXiv preprint arXiv:2512.03024},
+  year={2025}
+}"
+Operations,Cost,Usage,CEBench,"CEBench evaluates LLM pipelines by converting their measured compute usage into an estimated $ cost per run, so you can compare performance against real operational cost.",https://arxiv.org/pdf/2407.12797,"@article{sun2024cebench,
+  title={Cebench: A benchmarking toolkit for the cost-effectiveness of llm pipelines},
+  author={Sun, Wenbo and Wang, Jiaqi and Guo, Qiming and Li, Ziyu and Wang, Wenlu and Hai, Rihan},
+  journal={arXiv preprint arXiv:2407.12797},
+  year={2024}
+}"
+Operations,Efficiency,Speed,Time to First Token (TTFT) and Inter-token Latency (ITL),"Time to First Token (TTFT) measures the delay from request start to the first generated token, while Inter-Token Latency (ITL) measures the time between subsequent tokens during decoding, and together they capture both the startup latency and the streaming generation speed needed to evaluate LLM responsiveness.",https://docs.nvidia.com/nim/benchmarking/llm/latest/metrics.html?utm_source=chatgpt.com,
+Operations,Efficiency,Concurrency,Smooth Goodput,"Smooth Goodput measures how many LLM requests per second meet streaming latency targets in a way that reflects real user experience, without being inflated by tricks like delaying tokens or dropping slow requests.",https://arxiv.org/pdf/2410.14257,"@article{wang2024revisiting,
+  title={Revisiting Service Level Objectives and System Level Metrics in Large Language Model Serving},
+  author={Wang, Zhibin and Li, Shipeng and Zhou, Yuhang and Li, Xue and Zhang, Zhonghui and Cam-Tu, Nguyen and Gu, Rong and Tian, Chen and Chen, Guihai and Zhong, Sheng},
+  journal={arXiv preprint arXiv:2410.14257},
+  year={2024}
+}"
+Governance,Policy Enforcement,System,JailBreakV,"JailBreakV introduces a large-scale benchmark that tests multimodal LLM safety by measuring how well text- and image-based jailbreak attacks (including transfers from LLM jailbreaks) can bypass safeguards, typically reported via Attack Success Rate (ASR) across diverse adversarial scenarios.",https://arxiv.org/pdf/2404.03027,"@article{luo2024jailbreakv,
+  title={Jailbreakv: A benchmark for assessing the robustness of multimodal large language models against jailbreak attacks},
+  author={Luo, Weidi and Ma, Siyuan and Liu, Xiaogeng and Guo, Xiaoyu and Xiao, Chaowei},
+  journal={arXiv preprint arXiv:2404.03027},
+  year={2024}
+}"
+Governance,Policy Enforcement,System,SORRY-Bench,"SORRY-Bench is a balanced, fine-grained benchmark that measures an LLM’s safety-refusal behavior by testing whether it refuses vs. fulfills unsafe instructions across 44–45 unsafe topic categories and diverse prompt augmentations, with human annotations and an efficient automated evaluator to score refusals.",https://arxiv.org/pdf/2406.14598,"@article{xie2024sorry,
+  title={Sorry-bench: Systematically evaluating large language model safety refusal},
+  author={Xie, Tinghao and Qi, Xiangyu and Zeng, Yi and Huang, Yangsibo and Sehwag, Udari Madhushani and Huang, Kaixuan and He, Luxi and Wei, Boyi and Li, Dacheng and Sheng, Ying and others},
+  journal={arXiv preprint arXiv:2406.14598},
+  year={2024}
+}"
+Governance,Policy Enforcement,System,HarmMetric,"HarmMetric introduces a benchmark dataset and scoring framework for evaluating harmfulness metrics and LLM-based judges on harmful prompts paired with diverse harmful/non-harmful responses, and it finds that simple overlap metrics like METEOR and ROUGE-1 can outperform LLM judges at assessing harmfulness.",https://arxiv.org/pdf/2509.24384,"@article{yang2025harmmetric,
+  title={HarmMetric Eval: Benchmarking Metrics and Judges for LLM Harmfulness Assessment},
+  author={Yang, Langqi and Zheng, Tianhang and Xiu, Kedong and Chen, Yixuan and Wang, Di and Zhao, Puning and Qin, Zhan and Ren, Kui},
+  journal={arXiv preprint arXiv:2509.24384},
+  year={2025}
+}"
+Governance,Policy Enforcement,Ethical,RealToxicityPrompts,"RealToxicityPrompts measures a model’s tendency to generate toxic language by having it continue naturally occurring prompts and scoring the generations with the Perspective API toxicity score, typically reported as mean toxicity and/or the rate of outputs above a toxicity threshold.",https://arxiv.org/pdf/2009.11462,"@inproceedings{gehman2020realtoxicityprompts,
+  title={Realtoxicityprompts: Evaluating neural toxic degeneration in language models},
+  author={Gehman, Samuel and Gururangan, Suchin and Sap, Maarten and Choi, Yejin and Smith, Noah A},
+  booktitle={Findings of the association for computational linguistics: EMNLP 2020},
+  pages={3356--3369},
+  year={2020}
+}"
+Governance,Policy Enforcement,Legal,KL-extractability,KL-extractability (as used in practice) measures verbatim memorization by prompting a model with a prefix from a target sequence and scoring how many tokens of the true continuation the model reproduces under greedy decoding,https://openreview.net/pdf?id=TatRHT_1cK,"@inproceedings{carlini2022quantifying,
+  title={Quantifying memorization across neural language models},
+  author={Carlini, Nicholas and Ippolito, Daphne and Jagielski, Matthew and Lee, Katherine and Tramer, Florian and Zhang, Chiyuan},
+  booktitle={The Eleventh International Conference on Learning Representations},
+  year={2022}
+}"
+Governance,Security,Privacy,PII-Scope,"PII-Scope introduces a benchmark and evaluation framework for measuring training-data PII leakage in LLMs by running standardized PII extraction attacks across multiple threat settings and reporting extraction/leakage effectiveness (e.g., success rates) by PII type.",https://arxiv.org/pdf/2410.06704,"@article{nakka2024pii,
+  title={PII-Scope: A Comprehensive Study on Training Data PII Extraction Attacks in LLMs},
+  author={Nakka, Krishna Kanth and Frikha, Ahmed and Mendes, Ricardo and Jiang, Xue and Zhou, Xuebing},
+  journal={arXiv preprint arXiv:2410.06704},
+  year={2024}
+}"
+Governance,Security,Statefulness,PersistBench,"PersistBench is a benchmark for memory-enabled LLM assistants that tests whether stored memories are used appropriately over time, measuring failure cases like cross-domain leakage (irrelevant memories showing up in answers) and reporting how often they happen.",https://arxiv.org/pdf/2602.01146,"@article{pulipaka2026persistbench,
+  title={PersistBench: When Should Long-Term Memories Be Forgotten by LLMs?},
+  author={Pulipaka, Sidharth and Chen, Oliver and Sharma, Manas and Bajwa, Taaha S and Raina, Vyas and Sheth, Ivaxi},
+  journal={arXiv preprint arXiv:2602.01146},
+  year={2026}
+}"
