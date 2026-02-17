@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUX Framework Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        [x-cloak] { display: none !important; }
+        body { font-family: 'Inter', sans-serif; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .citation-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+        .citation-scroll::-webkit-scrollbar-track { background: #1e293b; border-radius: 4px; }
+        .citation-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        .citation-scroll::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased h-screen flex flex-col" 
+      x-data="luxApp()">
+
+    <header class="bg-white border-b border-slate-200 shadow-sm z-20 shrink-0 relative">
+        <div class="max-w-7xl mx-auto px-6 py-8">
+            <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
+                <div class="flex-1 text-center md:text-left min-w-0">
+                    <div class="inline-flex items-center gap-2 mb-2">
+                        <span class="px-2 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider rounded border border-slate-200">Framework v1.0</span>
+                    </div>
+                    <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-4">
+                        LUX <span class="font-light text-slate-400">Utility Taxonomy</span>
+                    </h1>
+                    <p class="text-slate-500 leading-relaxed max-w-2xl text-sm md:text-base mx-auto md:mx-0">
+                        A structured approach to evaluating LLM utility. Click on domains to filter, and click cards to explore components.
+                    </p>
+                    <div class="mt-6 flex flex-wrap items-center justify-center md:justify-start gap-3">
+                        <button @click="showCoreModal = true" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-emerald-600 px-5 py-2.5 rounded-full hover:bg-emerald-700 transition-all shadow-sm hover:shadow-md transform active:scale-95">
+                            <i class="ph ph-cpu text-lg"></i>
+                            View CORE Elements
+                        </button>
+                        <a href="#" target="_blank" class="inline-flex items-center gap-2 text-xs font-bold text-slate-600 bg-white border border-slate-300 px-5 py-2.5 rounded-full hover:bg-slate-50 hover:text-slate-900 transition-all shadow-sm hover:shadow-md transform active:scale-95">
+                            <i class="ph ph-article text-lg"></i>
+                            Read Framework Paper
+                        </a>
+                    </div>
+                </div>
+                <div class="w-full md:w-72 h-48 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center overflow-hidden shrink-0 relative shadow-inner">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-slate-300 z-0">
+                        <i class="ph ph-image text-4xl mb-2"></i>
+                        <span class="text-xs font-medium">Add Image Source</span>
+                    </div>
+                    <img src="./lux_framework_diagram.png" 
+                         alt="LUX Framework" 
+                         class="absolute inset-0 w-full h-full object-contain z-10 bg-white"
+                         onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 pb-0 mt-2">
+            <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 pl-1">Select a Domain</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
+                <template x-for="domain in domains" :key="domain.id">
+                    <button @click="selectedDomain = domain.id; selectedDimension = 'all'"
+                            class="relative pt-4 pb-3 px-4 rounded-t-xl border-t border-x border-b-0 transition-all duration-200 flex flex-col items-center md:items-start group h-full"
+                            :class="selectedDomain === domain.id ? 'bg-slate-50 border-slate-200 shadow-[0_4px_0_0_#f8fafc] z-10' : 'bg-white border-transparent hover:bg-slate-50 opacity-60 hover:opacity-100'">
+                        <div class="absolute top-0 left-0 w-full h-1 rounded-t-xl transition-all duration-300"
+                             :class="selectedDomain === domain.id ? domain.colorBg : 'bg-transparent'"></div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <i :class="domain.icon" class="text-xl" 
+                               :class="selectedDomain === domain.id ? domain.colorText : 'text-slate-400'"></i>
+                            <span class="font-bold text-sm md:text-base tracking-tight" 
+                                  :class="selectedDomain === domain.id ? 'text-slate-900' : 'text-slate-500'">
+                                <span x-text="domain.name"></span>
+                            </span>
+                        </div>
+                        <span class="hidden md:block text-[10px] text-slate-400 leading-tight text-left" x-text="domain.desc"></span>
+                    </button>
+                </template>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 bg-slate-50 border-t border-slate-200 flex flex-col overflow-hidden relative z-10 -mt-[1px]">
+        <div class="bg-white border-b border-slate-200 px-6 py-3 flex flex-col md:flex-row md:items-center justify-between gap-4 flex-none shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)] z-20">
+            <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide w-full md:w-auto pb-1 md:pb-0">
+                <span class="text-xs font-bold text-slate-400 uppercase mr-2 hidden md:block">Dimensions:</span>
+                <button @click="selectedDimension = 'all'"
+                        class="px-3 py-1.5 rounded-full text-xs font-medium border transition-colors whitespace-nowrap"
+                        :class="selectedDimension === 'all' ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'">
+                    All
+                </button>
+                <template x-for="dim in activeDimensions" :key="dim">
+                    <button @click="selectedDimension = dim"
+                            class="px-3 py-1.5 rounded-full text-xs font-medium border transition-colors whitespace-nowrap"
+                            :class="selectedDimension === dim ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'">
+                        <span x-text="dim"></span>
+                    </button>
+                </template>
+            </div>
+            <div class="relative w-full md:w-64">
+                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="text" x-model="searchQuery"
+                       placeholder="Find a metric..." 
+                       class="w-full bg-slate-100 border border-slate-200 rounded-lg py-1.5 pl-9 pr-3 text-xs focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 transition-all">
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 md:p-8 scroll-smooth">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-6 flex justify-between items-end border-b border-slate-200 pb-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                             <span x-text="getDomainName(selectedDomain)"></span>
+                             <span class="text-slate-300 font-light">/</span>
+                             <span class="text-slate-500 font-normal text-lg" x-text="selectedDimension === 'all' ? 'All Dimensions' : selectedDimension"></span>
+                        </h2>
+                    </div>
+                    <span class="text-xs text-slate-400 font-mono" x-text="filteredComponents.length + ' Components'"></span>
+                </div>
+
+                <div x-show="loading" class="py-12 text-center text-slate-400">
+                    <i class="ph ph-spinner animate-spin text-2xl mb-2"></i>
+                    <p class="text-sm">Loading data...</p>
+                </div>
+
+                <div x-show="!loading && filteredComponents.length === 0" class="py-12 text-center opacity-60">
+                    <p>No components found matching your filters.</p>
+                </div>
+
+                <div x-show="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
+                    <template x-for="comp in filteredComponents" :key="comp.id">
+                        <div @click="openComponent(comp)" 
+                             class="bg-white rounded-lg border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col group h-full cursor-pointer relative overflow-hidden">
+                             <div class="absolute inset-0 border-2 border-transparent group-hover:border-blue-100 rounded-lg pointer-events-none transition-colors"></div>
+                            <div class="p-4 border-b border-slate-50 relative z-10">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase text-slate-500 bg-slate-100 border border-slate-200">
+                                        <span x-text="comp.dimension"></span>
+                                    </span>
+                                    <i class="ph ph-arrow-right text-slate-300 group-hover:text-blue-500 transition-colors"></i>
+                                </div>
+                                <h3 class="text-base font-bold text-slate-800 leading-tight" x-text="comp.name"></h3>
+                            </div>
+                            <div class="p-4 bg-slate-50/50 flex-1 rounded-b-lg relative z-10">
+                                <div class="flex flex-wrap gap-2">
+                                    <template x-for="metric in comp.metrics" :key="metric.name">
+                                        <button @click.stop="openMetricDirectly(metric, comp)"
+                                                class="px-2.5 py-1 rounded text-[11px] font-medium border transition-all duration-150 flex items-center gap-1.5 bg-white text-slate-600 border-slate-200 hover:border-blue-400 hover:text-blue-600 hover:shadow-sm">
+                                            <span x-text="metric.name"></span>
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div x-show="drawerOpen" x-cloak class="relative z-50">
+        <div x-show="drawerOpen" 
+             x-transition:enter="transition-opacity ease-linear duration-300"
+             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+             x-transition:leave="transition-opacity ease-linear duration-300"
+             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px]" 
+             @click="closeDrawer()"></div>
+
+        <div class="fixed inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute inset-0 overflow-hidden">
+                <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                    
+                    <div x-show="drawerOpen" 
+                         x-transition:enter="transform transition ease-in-out duration-300"
+                         x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
+                         x-transition:leave="transform transition ease-in-out duration-300"
+                         x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full"
+                         class="pointer-events-auto w-screen max-w-md bg-white shadow-2xl border-l border-slate-100 relative h-full flex flex-col">
+                        
+                        <div class="absolute inset-0 flex flex-col bg-white z-10">
+                             <div class="px-6 py-6 bg-slate-50 border-b border-slate-200 flex items-start justify-between flex-none">
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-widest text-blue-600 font-bold mb-1">Component Overview</p>
+                                    <h2 class="text-2xl font-bold text-slate-900 leading-tight" x-text="selectedComponent?.name"></h2>
+                                    <p class="text-sm text-slate-500 mt-1">
+                                        <span x-text="selectedComponent?.domain"></span> / <span x-text="selectedComponent?.dimension"></span>
+                                    </p>
+                                </div>
+                                <button @click="closeDrawer()" class="text-slate-400 hover:text-slate-700 p-2 hover:bg-slate-100 rounded-full transition-colors">
+                                    <i class="ph ph-x text-xl"></i>
+                                </button>
+                            </div>
+                            <div class="flex-1 overflow-y-auto p-6">
+                                <div class="mb-6">
+                                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3">About this Component</h3>
+                                    <p class="text-sm text-slate-700 leading-relaxed">
+                                        This component evaluates <strong x-text="selectedComponent?.name"></strong> within the <span x-text="selectedComponent?.dimension"></span> dimension. Below are the specific metrics associated with it.
+                                    </p>
+                                </div>
+                                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-3">Included Metrics</h3>
+                                <div class="space-y-3">
+                                    <template x-for="m in selectedComponent?.metrics" :key="m.name">
+                                        <button @click="selectedMetric = m" 
+                                                class="w-full text-left bg-white border border-slate-200 p-3 rounded-lg hover:border-blue-400 hover:shadow-sm transition-all group">
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="font-bold text-sm text-slate-800 group-hover:text-blue-600" x-text="m.name"></span>
+                                                <i class="ph ph-caret-right text-slate-300 group-hover:text-blue-500"></i>
+                                            </div>
+                                            <p class="text-xs text-slate-500 line-clamp-2" x-text="m.description"></p>
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div x-show="selectedMetric" 
+                             x-transition:enter="transform transition ease-out duration-300"
+                             x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
+                             x-transition:leave="transform transition ease-in duration-200"
+                             x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full"
+                             class="absolute inset-0 flex flex-col bg-white z-20 shadow-[-10px_0_15px_-3px_rgba(0,0,0,0.1)]">
+                             
+                             <div class="px-6 py-6 bg-slate-50 border-b border-slate-200 flex items-start justify-between flex-none">
+                                <div>
+                                    <button @click="selectedMetric = null" class="mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 flex items-center gap-1 transition-colors group">
+                                        <i class="ph ph-arrow-left group-hover:-translate-x-1 transition-transform"></i> Back to Component
+                                    </button>
+                                    <p class="text-[10px] uppercase tracking-widest text-blue-600 font-bold mb-1">Metric Detail</p>
+                                    <h2 class="text-2xl font-bold text-slate-900 leading-tight" x-text="selectedMetric?.name"></h2>
+                                </div>
+                                <button @click="closeDrawer()" class="text-slate-400 hover:text-slate-700 p-2 hover:bg-slate-100 rounded-full transition-colors">
+                                    <i class="ph ph-x text-xl"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="flex-1 overflow-y-auto p-6 space-y-8" x-data="{ citationTab: 'apa', copied: false }">
+                                <div>
+                                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Description</h3>
+                                    <p class="text-sm text-slate-700 leading-relaxed" x-text="selectedMetric?.description"></p>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wide">Citation</h3>
+                                        <div class="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                                            <button @click="citationTab = 'apa'" 
+                                                    class="px-2 py-1 text-[10px] font-bold rounded-md transition-colors"
+                                                    :class="citationTab === 'apa' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+                                                APA
+                                            </button>
+                                            <button @click="citationTab = 'bibtex'" 
+                                                    class="px-2 py-1 text-[10px] font-bold rounded-md transition-colors"
+                                                    :class="citationTab === 'bibtex' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+                                                BibTeX
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div x-show="citationTab === 'apa'" class="relative">
+                                        <div class="bg-blue-50/50 rounded-lg p-4 border border-blue-100 text-sm text-slate-800 leading-relaxed">
+                                            <div x-html="getAPA(selectedMetric?.citation)"></div>
+                                        </div>
+                                        <button @click="navigator.clipboard.writeText(getPlainTextAPA(selectedMetric?.citation)); copied = true; setTimeout(() => copied = false, 2000)"
+                                                class="mt-2 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider transition-colors"
+                                                :class="copied ? 'text-emerald-600' : 'text-blue-600 hover:text-blue-800'">
+                                            <i class="ph" :class="copied ? 'ph-check' : 'ph-copy'"></i>
+                                            <span x-text="copied ? 'Copied to Clipboard' : 'Copy Citation'"></span>
+                                        </button>
+                                    </div>
+
+                                    <div x-show="citationTab === 'bibtex'" class="relative">
+                                        <div class="bg-slate-900 rounded-lg p-4 relative group overflow-hidden border border-slate-700">
+                                            <pre class="text-[10px] font-mono text-emerald-400 leading-relaxed whitespace-pre-wrap break-all citation-scroll max-h-48 overflow-y-auto" 
+                                                 x-text="selectedMetric?.citation"></pre>
+                                        </div>
+                                        <button @click="navigator.clipboard.writeText(selectedMetric?.citation); copied = true; setTimeout(() => copied = false, 2000)"
+                                                class="mt-2 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider transition-colors"
+                                                :class="copied ? 'text-emerald-600' : 'text-slate-500 hover:text-slate-700'">
+                                            <i class="ph" :class="copied ? 'ph-check' : 'ph-copy'"></i>
+                                            <span x-text="copied ? 'Copied BibTeX' : 'Copy BibTeX'"></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <a :href="selectedMetric?.link" target="_blank" class="flex w-full items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-medium py-3 rounded-lg transition-colors text-sm shadow-md hover:shadow-lg transform active:scale-[0.99]">
+                                    <span>Read Paper</span><i class="ph ph-arrow-square-out"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div x-show="showCoreModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" @click="showCoreModal = false"></div>
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl relative z-10 overflow-hidden transform transition-all"
+             x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
+            <div class="bg-slate-900 p-6 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="bg-emerald-500/20 p-2 rounded-lg"><i class="ph ph-cpu text-2xl text-emerald-400"></i></div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">The CORE</h2>
+                        <p class="text-slate-400 text-xs">Foundational elements of LUX</p>
+                    </div>
+                </div>
+                <button @click="showCoreModal = false" class="text-slate-500 hover:text-white p-2 hover:bg-slate-800 rounded-full transition-colors"><i class="ph ph-x text-xl"></i></button>
+            </div>
+            <div class="p-8 grid md:grid-cols-2 gap-6">
+                <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                    <h3 class="font-bold text-slate-900 mb-2 flex items-center gap-2"><i class="ph ph-database text-emerald-600"></i> Data</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Determines depth and breadth. Dictates what the model learns, inherited biases, and generalization contexts.</p>
+                </div>
+                <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                    <h3 class="font-bold text-slate-900 mb-2 flex items-center gap-2"><i class="ph ph-circuitry text-blue-600"></i> Architecture</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Governs representation and transformation. Defines internal mechanisms enabling generation and behavior.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const csvDataString = `
+Domain,Dimension,Component,Metric,Description,Citation,Hyperlink
+Performance,Accuracy,General Knowledge,MMLU,"Massive Multitask Language Understanding. Covers 57 subjects across STEM, the humanities, and social sciences.","@article{hendrycks2020measuring,
+  title={Measuring Massive Multitask Language Understanding},
+  author={Dan Hendrycks and Collin Burns and Steven Basart},
+  journal={ICLR},
+  year={2021}
+}",https://arxiv.org/abs/2009.03300
+Performance,Accuracy,General Knowledge,ARC-Challenge,A grade-school science question set designed to encourage research in advanced question-answering.,"@article{clark2018think,
+  title={Think you have Solved Question Answering? Try ARC, the AI2 Reasoning Challenge},
+  author={Peter Clark and Isaac Cowhey and Oren Etzioni},
+  journal={arXiv},
+  year={2018}
+}",https://arxiv.org/abs/1803.05457
+Performance,Accuracy,Reasoning,GSM8K,High quality linguistically diverse grade school math word problems.,"@article{cobbe2021training,
+  title={Training Verifiers to Solve Math Word Problems},
+  author={Karl Cobbe and Vineet Kosaraju and Mohammad Bavarian},
+  journal={arXiv},
+  year={2021}
+}",https://arxiv.org/abs/2110.14168
+Performance,Accuracy,Reasoning,HellaSwag,A dataset for studying grounded commonsense inference.,"@inproceedings{zellers2019hellaswag,
+  title={HellaSwag: Can a Machine Really Finish Your Sentence?},
+  author={Rowan Zellers and Ari Holtzman and Yonatan Bisk},
+  booktitle={ACL},
+  year={2019}
+}",https://arxiv.org/abs/1905.07830
+Performance,Reliability,Hallucination,TruthfulQA,Measures whether models mimic human falsehoods across 38 categories.,"@article{lin2021truthfulqa,
+  title={TruthfulQA: Measuring How Models Mimic Human Falsehoods},
+  author={Stephanie Lin and Jacob Hilton and Owain Evans},
+  journal={arXiv},
+  year={2021}
+}",https://arxiv.org/abs/2109.07958
+Performance,Reliability,Hallucination,HaluEval,A large-scale hallucination evaluation benchmark for LLMs.,"@inproceedings{li2023halueval,
+  title={HaluEval: A Large-Scale Hallucination Evaluation Benchmark for Large Language Models},
+  author={Junyi Li and Xiaoxue Cheng and Wayne Xin Zhao},
+  booktitle={EMNLP},
+  year={2023}
+}",https://arxiv.org/abs/2305.11747
+Performance,Reliability,Calibration,Expected Calibration Error,Measures the difference between predicted confidence and actual accuracy.,"@inproceedings{guo2017calibration,
+  title={On Calibration of Modern Neural Networks},
+  author={Chuan Guo and Geoff Pleiss and Yu Sun},
+  booktitle={ICML},
+  year={2017}
+}",https://arxiv.org/abs/1706.04599
+Interaction,Usability,Coherence,BLEU,Bilingual Evaluation Understudy. Scores based on the precision of n-grams.,"@inproceedings{papineni2002bleu,
+  title={BLEU: a method for automatic evaluation of machine translation},
+  author={Kishore Papineni and Salim Roukos and Todd Ward},
+  booktitle={ACL},
+  year={2002}
+}",https://aclanthology.org/P02-1040/
+Interaction,Usability,Coherence,ROUGE-L,Longest Common Subsequence based metric for summarization.,"@inproceedings{lin2004rouge,
+  title={ROUGE: A Package for Automatic Evaluation of Summaries},
+  author={Chin-Yew Lin},
+  booktitle={ACL},
+  year={2004}
+}",https://aclanthology.org/W04-1013/
+Interaction,Usability,Fluency,Perplexity,A measurement of how well a probability model predicts a sample.,"@article{jelinek1977perplexity,
+  title={Perplexity—a measure of the difficulty of speech recognition tasks},
+  author={Fred Jelinek and Robert L. Mercer},
+  journal={JASA},
+  year={1977}
+}",https://en.wikipedia.org/wiki/Perplexity
+Interaction,User Experience,Navigation,Click-Depth,Average number of interactions required to reach desired output.,"@misc{standard_metric_click_depth,
+  title={Standard Usability Metric: Click-Depth},
+  author={Standard Industry Metric},
+  year={2023}
+}",#
+Operations,Efficiency,Latency,Time To First Token (TTFT),The duration from prompt submission to the generation of the first token.,"@misc{standard_metric_ttft,
+  title={Standard Efficiency Metric: Time To First Token},
+  author={Standard Industry Metric},
+  year={2023}
+}",#
+Operations,Efficiency,Throughput,Tokens Per Second (TPS),The rate at which the model generates tokens after the first one.,"@misc{standard_metric_tps,
+  title={Standard Efficiency Metric: Tokens Per Second},
+  author={Standard Industry Metric},
+  year={2023}
+}",#
+Operations,Cost,Inference Cost,Cost Per 1k Tokens,The monetary cost to process input/output tokens.,"@misc{standard_metric_cost,
+  title={Standard Operational Metric: Cost Per 1k Tokens},
+  author={Standard Industry Metric},
+  year={2023}
+}",#
+Operations,Cost,Training Cost,FLOPs,Floating point operations required to train the model.,"@article{kaplan2020scaling,
+  title={Scaling Laws for Neural Language Models},
+  author={Jared Kaplan and Sam McCandlish and Tom Henighan},
+  journal={arXiv},
+  year={2020}
+}",https://arxiv.org/abs/2001.08361
+Operations,Environmental,Carbon Footprint,kgCO2eq,Estimated carbon emissions equivalents for model training/inference.,"@inproceedings{strubell2019energy,
+  title={Energy and Policy Considerations for Deep Learning in NLP},
+  author={Emma Strubell and Ananya Ganesh and Andrew McCallum},
+  booktitle={ACL},
+  year={2019}
+}",https://arxiv.org/abs/1906.02243
+Governance,Safety,Bias,CrowS-Pairs,Crowdsourced Stereotype Pairs benchmark for measuring social bias.,"@inproceedings{nangia2020crows,
+  title={CrowS-Pairs: A Challenge Dataset for Measuring Social Biases in Masked Language Models},
+  author={Nikita Nangia and Clara Vania and Rasmus Biskopsto},
+  booktitle={EMNLP},
+  year={2020}
+}",https://aclanthology.org/2020.emnlp-main.154/
+Governance,Safety,Bias,BBQ,Bias Benchmark for QA. Measures bias in question answering contexts.,"@inproceedings{parrish2021bbq,
+  title={BBQ: A hand-built bias benchmark for question answering},
+  author={Alicia Parrish and Angelica Chen and Nikita Nangia},
+  booktitle={Findings of ACL},
+  year={2021}
+}",https://arxiv.org/abs/2110.08193
+Governance,Safety,Toxicity,RealToxicityPrompts,Evaluating neural toxic degeneration in language models.,"@inproceedings{gehman2020realtoxicityprompts,
+  title={RealToxicityPrompts: Evaluating Neural Toxic Degeneration in Language Models},
+  author={Samuel Gehman and Suchin Gururangan and Maarten Sap},
+  booktitle={Findings of EMNLP},
+  year={2020}
+}",https://arxiv.org/abs/2009.11462
+Governance,Transparency,Documentation,Model Card,Standardized documentation of model limitations and intended use.,"@inproceedings{mitchell2019model,
+  title={Model Cards for Model Reporting},
+  author={Margaret Mitchell and Simone Wu and Andrew Zaldivar},
+  booktitle={FAT*},
+  year={2019}
+}",https://arxiv.org/abs/1810.03993
+Governance,Privacy,Data Leakage,Training Data Extraction,Measures ability to extract memorized private data from the model.,"@inproceedings{carlini2021extracting,
+  title={Extracting Training Data from Large Language Models},
+  author={Nicholas Carlini and Florian Tramer and Eric Wallace},
+  booktitle={USENIX Security},
+  year={2021}
+}",https://arxiv.org/abs/2012.07805
+`;
+
+        function luxApp() {
+            return {
+                loading: true,
+                rawComponents: [],
+                searchQuery: '',
+                selectedDomain: 'performance',
+                selectedDimension: 'all',
+                
+                // STACKED STATE
+                drawerOpen: false, 
+                selectedComponent: null, // Base Layer
+                selectedMetric: null,    // Overlay Layer
+                showCoreModal: false,
+
+                // CONFIG
+                domains: [
+                    { id: 'performance', name: 'Performance', desc: 'Accuracy & Reliability', icon: 'ph-chart-line-up', colorText: 'text-cyan-600', colorBg: 'bg-cyan-500' },
+                    { id: 'interaction', name: 'Interaction', desc: 'Usability & Coherence', icon: 'ph-users', colorText: 'text-purple-600', colorBg: 'bg-purple-500' },
+                    { id: 'operations', name: 'Operations', desc: 'Efficiency & Cost', icon: 'ph-gear', colorText: 'text-orange-600', colorBg: 'bg-orange-500' },
+                    { id: 'governance', name: 'Governance', desc: 'Safety & Bias', icon: 'ph-scales', colorText: 'text-red-600', colorBg: 'bg-red-500' }
+                ],
+
+                init() {
+                    const result = Papa.parse(csvDataString, { header: true, skipEmptyLines: true });
+                    this.processData(result.data);
+                    setTimeout(() => { this.loading = false; }, 300);
+                },
+
+                processData(csvData) {
+                    const componentsMap = new Map();
+                    csvData.forEach(row => {
+                        const domain = row.Domain?.toLowerCase().trim();
+                        const dimension = row.Dimension?.trim();
+                        const compName = row.Component?.trim();
+                        if(!domain || !compName) return;
+
+                        const key = `${domain}-${dimension}-${compName}`;
+                        if (!componentsMap.has(key)) {
+                            componentsMap.set(key, {
+                                id: key,
+                                domain: domain,
+                                dimension: dimension,
+                                name: compName,
+                                metrics: []
+                            });
+                        }
+                        componentsMap.get(key).metrics.push({
+                            name: row.Metric,
+                            description: row.Description, 
+                            citation: row.Citation,       
+                            link: row.Hyperlink           
+                        });
+                    });
+                    this.rawComponents = Array.from(componentsMap.values());
+                },
+
+                // ---- CITATION PARSING LOGIC ----
+                parseBibTex(bibtex) {
+                    if (!bibtex || !bibtex.includes('@')) return null;
+                    
+                    const getField = (key) => {
+                        const regex = new RegExp(`${key}\\s*=\\s*["{]([\\s\\S]*?)["}]`, 'i');
+                        const match = bibtex.match(regex);
+                        if (match) return match[1].replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+                        return '';
+                    };
+
+                    return {
+                        title: getField('title'),
+                        author: getField('author'),
+                        journal: getField('journal') || getField('booktitle') || getField('publisher') || '',
+                        year: getField('year')
+                    };
+                },
+
+                getAPA(bibtex) {
+                    const data = this.parseBibTex(bibtex);
+                    if (!data) return '<span class="text-slate-400 italic">Citation unavailable</span>';
+
+                    // Simple author formatting (Last, F.) approximation
+                    // Real APA requires splitting commas/ands, but for this demo we'll clean spacing
+                    let authors = data.author;
+                    
+                    // Construct HTML string
+                    // Note: We use <i> tags for the journal title
+                    return `<span>${authors}</span> (${data.year}). <span>${data.title}</span>. <i class="font-serif">${data.journal}</i>.`;
+                },
+
+                getPlainTextAPA(bibtex) {
+                    // Strip HTML tags for clipboard copy
+                    const html = this.getAPA(bibtex);
+                    return html.replace(/<[^>]*>?/gm, ''); 
+                },
+
+                // ---- REST OF LOGIC ----
+
+                get activeDimensions() {
+                    const domComponents = this.rawComponents.filter(c => c.domain === this.selectedDomain);
+                    return [...new Set(domComponents.map(c => c.dimension))];
+                },
+
+                get filteredComponents() {
+                    return this.rawComponents.filter(c => {
+                        const domainMatch = c.domain === this.selectedDomain;
+                        const dimMatch = this.selectedDimension === 'all' || c.dimension === this.selectedDimension;
+                        const q = this.searchQuery.toLowerCase();
+                        const searchMatch = !q || 
+                                          c.name.toLowerCase().includes(q) || 
+                                          c.metrics.some(m => m.name.toLowerCase().includes(q));
+                        return domainMatch && dimMatch && searchMatch;
+                    });
+                },
+
+                openComponent(comp) {
+                    this.selectedComponent = comp;
+                    this.selectedMetric = null; 
+                    this.drawerOpen = true;
+                },
+
+                openMetricDirectly(metric, parentComponent) {
+                    this.selectedComponent = parentComponent;
+                    this.selectedMetric = metric; 
+                    this.drawerOpen = true;
+                },
+
+                closeDrawer() {
+                    this.drawerOpen = false;
+                    setTimeout(() => {
+                        this.selectedComponent = null;
+                        this.selectedMetric = null;
+                    }, 300);
+                },
+
+                getDomainName(id) {
+                    return this.domains.find(d => d.id === id)?.name;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
